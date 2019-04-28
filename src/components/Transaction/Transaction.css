@@ -1,0 +1,59 @@
+.transaction-container {
+  border-top: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 3rem 1rem;
+  cursor: pointer;
+}
+
+.transaction-container:hover {
+  background-color: #f5f8fc;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0.5rem 0;
+}
+
+.nondisplay {
+  display: none;
+}
+
+.col-3-1 {
+  width: 33.3%;
+}
+
+.col-3-2 {
+  width: 66.6%;
+}
+
+/* TYPOGRAPHY */
+
+.font-transaction-type {
+  font-size: 1.6rem;
+  color: black;
+  font-family: "Roboto Slab";
+  font-weight: 600;
+}
+
+.font-amount {
+  font-size: 2rem;
+  color: black;
+  font-family: "Roboto";
+  font-weight: 600;
+}
+
+.font-subtitle {
+  font-size: 1.4rem;
+  color: #888888;
+}
+
+.font-subinfo {
+  font-size: 1.2rem;
+  color: #888888;
+}
+
+.font-darkgrey {
+  font-size: 1.4rem;
+  color: #4c4c4c;
+  font-weight: 500;
+}

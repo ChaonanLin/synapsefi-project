@@ -1,0 +1,83 @@
+.select-box {
+  position: relative;
+}
+
+.select-box-container {
+  box-shadow: 0 0 0.8rem rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  height: 4.5rem;
+}
+
+.select-box-selected-item {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  vertical-align: middle;
+  font-size: 2rem;
+  color: black;
+  font-weight: 400;
+  padding: 0.5rem 1.5rem;
+}
+
+.select-box-arrow-container {
+  border-radius: 8px;
+  width: 4rem;
+  height: 4rem;
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  border: none;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+}
+
+.select-box-arrow-down {
+  position: absolute;
+  top: 2rem;
+  left: 0.7rem;
+  width: 0;
+  height: 0;
+  background: #fff;
+  border-left: 0.8rem solid transparent;
+  border-right: 0.8rem solid transparent;
+  border-top: 1rem solid #1797aa;
+}
+
+.select-box-arrow-up {
+  position: absolute;
+  top: 1.5rem;
+  left: 0.6rem;
+  width: 0;
+  height: 0;
+  background: #fff;
+  border-left: 0.8rem solid transparent;
+  border-right: 0.8rem solid transparent;
+  border-bottom: 1em solid #1797aa;
+}
+
+.select-box-items {
+  box-shadow: 0 0.5rem 0.8rem rgba(0, 0, 0, 0.2);
+  border-radius: 0 0 8px 8px;
+  margin: 0;
+  padding: 0.5rem 1.5rem;
+  background-color: #fff;
+  height:12rem;
+  overflow: auto;
+}
+
+.select-box-items div {
+  padding: 6px;
+  padding-left: 10px;
+  background-color: #fff;
+}
+
+.itemslist {
+  font-size: 1.8rem;
+  color: black;
+  width: 100%;
+  text-align: left;
+}

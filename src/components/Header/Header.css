@@ -1,0 +1,24 @@
+.header-container {
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    background-color: #fff;
+    border-bottom: 1px solid #dadada;
+    height:8rem;
+}
+
+.header-logo-container{
+    width:12rem;
+    position:absolute;
+    top:2rem;
+    left:6rem;
+}
+
+.header-logo-img{
+    width:100%;
+}
+
+.header-close-container{
+
+}

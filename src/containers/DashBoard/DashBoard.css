@@ -1,0 +1,121 @@
+/* TYPOGRAPHY */
+
+.scdryfont {
+  color: black;
+  font-family: "Roboto Slab";
+}
+
+/*DASHBOARD CONTAINER CSS*/
+
+.dashboard-container {
+  width: 100rem;
+  margin: 0 auto;
+  background-color: #fff;
+  border: 1px solid #dadada;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-wrap: wrap;
+  padding: 5%;
+}
+
+.dashboard-half-container {
+  width: 50%;
+  padding: 2%;
+}
+
+/*CARD CSS*/
+
+.dashboard-card-tools {
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.dashboard-card-status-dot__green {
+  background-color: #4cb75c;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 10rem;
+  display: inline-block;
+}
+
+.dashboard-card-status-text {
+  padding-left: 5%;
+  color: Black;
+  font-size: 2rem;
+  font-weight: 500;
+  display: inline-block;
+}
+
+.button__blue {
+  border: 1px solid #1797aa;
+  border-radius: 4px;
+  color: #1797aa;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+  width:100%;
+}
+
+.button__blue:hover {
+  background-color: #049cb0;
+  color: #fff;
+}
+
+.button__yellow {
+  border: 1px solid #ffa231;
+  border-radius: 4px;
+  color: #ffa231;
+  text-align: center;
+  padding: 1rem 1.5rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.card-setting {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  padding: 0.7rem 1rem;
+  font-size: 2.5rem;
+  color: rgb(117, 117, 117);
+  position: absolute;
+  right: 0;
+  cursor: pointer;
+}
+
+.card-setting:hover {
+  color: #fff;
+  background-color: rgb(117, 117, 117);
+  cursor: pointer;
+}
+
+/* TRANSACTIONS SECTION CSS */
+
+.dashboard-transactions-container {
+  margin-top: 4rem;
+  width: 100%;
+  padding: 2%;
+}
+
+.transactions-title{
+    font-size: 2rem;
+}
+
+.transactions-subtitle {
+    color: rgba(0, 0, 0, 0.77);
+    fontWeight:400;
+    margin:1rem 0
+}
+
+.transactions-divider__bold {
+  margin-top: 5rem;
+  width: 5.6rem;
+  height: .8rem;
+  background-color: rgba(0, 0, 0, 0.77);
+}
+
+.payment-button {
+    border:
+}

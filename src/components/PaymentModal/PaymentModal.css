@@ -1,0 +1,82 @@
+.payment-container {
+  margin: 6rem auto;
+  padding: 2rem 4rem;
+  border-radius: 0.8rem;
+  box-sizing: 0 0 10px rgba(0, 0, 0, 0.3);
+  width: 60%;
+  background-color: #fff;
+}
+
+.payment-close {
+  float: right;
+  font-size: 2.5rem;
+}
+
+.payment-title {
+  color: black;
+  font-family: "Roboto Slab";
+  font-size: 2.5rem;
+  letter-spacing: 0.15rem;
+  font-weight: 500;
+  text-align: center;
+  padding: 2rem;
+}
+
+.payment-divider {
+  margin: 3rem auto 2.5rem;
+  width: 5.6rem;
+  height: 0.8rem;
+  background-color: rgba(0, 0, 0, 0.77);
+}
+
+.payment-description {
+  text-align: center;
+  width: 85%;
+  margin: auto;
+  line-height: normal;
+}
+
+.payment-input-container {
+  margin: auto;
+  width: 90%;
+  padding: 2rem 0;
+  display: flex;
+}
+
+.payment-input-container span{
+    font-weight: 600;
+    font-size: 12rem;
+    color: rgb(76, 76, 76);
+}
+
+.payment-input {
+  text-align: center;
+  font-weight: 600;
+  font-size: 12rem;
+  color: rgb(76, 76, 76);
+  width: 100%;
+  height: auto;
+  border: none;
+  font-family: "Roboto Slab";
+}
+
+.payment-account-dropdown {
+    width:85%;
+    margin: 0 auto 5rem;
+
+}
+
+.payment-button {
+  border: 1px solid #1797aa;
+  border-radius: 4px;
+  color: #1797aa;
+  text-align: center;
+  padding: 1rem 1.2rem;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+.payment-button:hover {
+  background-color: #049cb0;
+  color: #fff;
+}

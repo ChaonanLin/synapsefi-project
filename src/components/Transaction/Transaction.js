@@ -3,8 +3,7 @@ import "./Transaction.css";
 
 class Transaction extends Component {
   state = {
-    open: false,
-    receive: this.props.type === "Card Deposit"
+    open: false
   };
 
   extend = () => {
@@ -30,7 +29,9 @@ class Transaction extends Component {
         <div className={this.state.open ? "row" : "nondisplay"}>
           <div className="col-3-1">
             <div className="font-subtitle">
-              {this.state.receive ? "Transfer From" : "Transfer To"}
+              {this.props.type === "Card Withdrawal"
+                ? "Transfer To"
+                : "Transfer From"}
             </div>
             <div className="font-darkgrey">{direction}</div>
           </div>

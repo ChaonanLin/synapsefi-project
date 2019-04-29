@@ -22,9 +22,9 @@ class Dropdown extends Component {
       <div className="select-box">
         <div className="select-box-container">
           <div className="select-box-selected-item">
-            {this.props.selectedAccount.value}
+            {this.props.selectedAccount.info.nickname}
           </div>
-          <button
+          <div
             className="select-box-arrow-container"
             tabIndex="0"
             onClick={this.dropDown}
@@ -36,21 +36,21 @@ class Dropdown extends Component {
                   : "select-box-arrow-down"
               }
             />
-          </button>
+          </div>
           <div
             style={{ display: this.props.showItems ? "block" : "none" }}
             className="select-box-items"
           >
             {this.props.items.map(item => (
               <div
-                key={item.id}
+                key={item._id}
                 onClick={() => this.selectItem(item)}
                 onKeyPress={this.keypress}
                 role="button"
                 className="itemslist"
                 tabIndex="0"
               >
-                {item.value}
+                {item.info.nickname}
               </div>
             ))}
           </div>

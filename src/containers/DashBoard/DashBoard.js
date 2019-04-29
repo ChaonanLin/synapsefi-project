@@ -3,13 +3,16 @@ import DebitCard from "../../components/DebitCard/DebitCard";
 import Dialog from "@material-ui/core/Dialog";
 import Transaction from "../../components/Transaction/Transaction";
 import PaymentModal from ".././PaymentModal/PaymentModal";
-
+import axios from "axios";
 import "./DashBoard.css";
 
 class DashBoard extends Component {
   state = {
     modalOpen: false,
-    modalType: ""
+    modalType: "",
+    currentAccount: {},
+    nodes: [],
+    transactions: []
   };
 
   onModalChange = value => {
@@ -19,7 +22,72 @@ class DashBoard extends Component {
     }));
   };
 
+  componentDidMount() {
+    let headers = {
+      "X-SP-GATEWAY":
+        "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
+      "X-SP-USER-IP": "73.241.31.11",
+      "X-SP-USER": "oauth_IiOtyoju0mn59JCH2QELd4BWfKPSGhV8YzDbZM0U|",
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
+    };
+
+    //get current account info
+    axios
+      .get(
+        `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26`,
+        {
+          headers: headers
+        }
+      )
+      .then(res => {
+        this.setState({ currentAccount: res.data });
+      })
+      .catch(res => {
+        console.log("failed", res);
+      });
+
+    //get all other accounts
+    axios
+      .get(
+        `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes`,
+        {
+          headers: headers
+        }
+      )
+      .then(res => {
+        console.log(res.data.nodes);
+        //filter out the current account
+        let otherAccount = res.data.nodes.filter(node => node._id !== "5cc661ea21730420ee50ee26")
+        this.setState({ nodes: otherAccount });
+      })
+      .catch(res => {
+        console.log("failed", res);
+      });
+
+    //get all transactions data of test saving account
+    axios
+      .get(
+        `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26/trans`,
+        {
+          headers: headers
+        }
+      )
+      .then(res => {
+        console.log(res.data.trans);
+        this.setState({ transactions: res.data.trans });
+      })
+      .catch(res => {
+        console.log("failed", res);
+      });
+  }
+
   render() {
+    let amount =
+      this.state.currentAccount.info
+        ? this.state.currentAccount.info.balance.amount
+        : "loading";
+
     return (
       <div className="dashboard-container">
         <div className="dashboard-half-container">
@@ -31,7 +99,7 @@ class DashBoard extends Component {
             style={{ fontSize: 55, fontWeight: 400, letterSpacing: 3 }}
             className="scdryfont"
           >
-            $345,432.62
+            ${amount}
           </h1>
           <div className="dashboard-card-tools">
             <div className="dashboard-half-container">
@@ -73,6 +141,8 @@ class DashBoard extends Component {
             <PaymentModal
               onCloseModal={this.onModalChange}
               type={this.state.modalType}
+              accounts={this.state.nodes}
+              balance={amount}
             />
           </Dialog>
         </div>
@@ -82,22 +152,19 @@ class DashBoard extends Component {
           <div style={{ marginTop: 40 }}>
             <div className="transactions-subtitle">PAST TRANSACTIONS</div>
             <div>
-              <Transaction
-                type="Card Withdrawal"
-                date="26 Apr 2019"
-                amount="+$90.09"
-                status="PENDING"
-                id="5cc3640d03d45400cb9a4c24"
-                direction="My Checking"
-              />
-              <Transaction
-                type="Card Withdrawal"
-                date="26 Apr 2019"
-                amount="+$90.09"
-                status="PENDING"
-                id="5cc3640d03d45400cb9a4c24"
-                direction="My Checking"
-              />
+              {this.state.transactions.map(transaction => {
+                return (
+                  <Transaction
+                    key={transaction._id}
+                    type={transaction.from.id === "5cc661ea21730420ee50ee26" ? "Card Withdrawal" : "Cash Deposit"}
+                    date="29 April 2019"
+                    amount={"$" + transaction.amount.amount}
+                    status={transaction.recent_status.status}
+                    id={transaction._id}
+                    direction={transaction.from.id === "5cc661ea21730420ee50ee26" ? transaction.to.nickname : transaction.from.nickname }
+                  />
+                );
+              })}
             </div>
           </div>
         </div>

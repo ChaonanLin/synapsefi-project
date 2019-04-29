@@ -1,18 +1,22 @@
 import React, { Component } from "react";
 import DebitCard from "../../components/DebitCard/DebitCard";
-import Modal from "@material-ui/core/Modal";
+import Dialog from "@material-ui/core/Dialog";
 import Transaction from "../../components/Transaction/Transaction";
-import PaymentModal from "../../components/PaymentModal/PaymentModal";
+import PaymentModal from ".././PaymentModal/PaymentModal";
 
 import "./DashBoard.css";
 
 class DashBoard extends Component {
   state = {
-    modalOpen: false
+    modalOpen: false,
+    modalType: ""
   };
 
-  onModalChange = () => {
-    this.setState(prevState => ({ modalOpen: !prevState.modalOpen }));
+  onModalChange = value => {
+    this.setState(prevState => ({
+      modalOpen: !prevState.modalOpen,
+      modalType: value
+    }));
   };
 
   render() {
@@ -47,19 +51,30 @@ class DashBoard extends Component {
               </div>
             </div>
             <div className="dashboard-half-container">
-              <button className="button__blue" onClick={this.onModalChange}>
+              <button
+                className="button__blue"
+                onClick={() => this.onModalChange("add cash")}
+              >
                 Add Cash
               </button>
             </div>
             <div className="dashboard-half-container">
-              <button className="button__blue">Cash Out</button>
+              <button
+                className="button__blue"
+                onClick={() => this.onModalChange("cash out")}
+              >
+                Cash Out
+              </button>
             </div>
           </div>
         </div>
         <div>
-          <Modal open={this.state.modalOpen}>
-            <PaymentModal onCloseModal={this.onModalChange} />
-          </Modal>
+          <Dialog open={this.state.modalOpen}>
+            <PaymentModal
+              onCloseModal={this.onModalChange}
+              type={this.state.modalType}
+            />
+          </Dialog>
         </div>
         <div className="dashboard-transactions-container">
           <h3 className="scdryfont transactions-title">TRANSACTIONS</h3>

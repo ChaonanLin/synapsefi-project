@@ -1,0 +1,46 @@
+{
+    "error_code": "0",
+    "http_code": "200",
+    "limit": 20,
+    "node_count": 1,
+    "nodes": [
+        {
+            "_id": "5cc5e6f9ed6d2b6fe6e76395",
+            "_links": {
+                "self": {
+                    "href": "https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc5e6f9ed6d2b6fe6e76395"
+                }
+            },
+            "allowed": "CREDIT-AND-DEBIT",
+            "client": {
+                "id": "5cbe8f07e187170029342f5e",
+                "name": "Chaonan Lin"
+            },
+            "extra": {
+                "note": null,
+                "other": {},
+                "supp_id": ""
+            },
+            "info": {
+                "balance": {
+                    "amount": 0,
+                    "currency": "USD"
+                },
+                "document_id": "2a4a5957a3a62aaac1a0dd0edcae96ea2cdee688ec6337b20745eed8869e3ac8",
+                "name_on_account": " ",
+                "nickname": "My Second Deposit Account"
+            },
+            "is_active": true,
+            "timeline": [
+                {
+                    "date": 1556473593000,
+                    "note": "Node created."
+                }
+            ],
+            "type": "DEPOSIT-US",
+            "user_id": "5cc13e09ad388f6fabe64d76"
+        }
+    ],
+    "page_count": 1,
+    "success": true
+}

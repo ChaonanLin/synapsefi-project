@@ -2,20 +2,12 @@ import React, { Component } from "react";
 import "./Dropdown.css";
 
 class Dropdown extends Component {
-  state = {
-    items: this.props.items || [],
-    showItems: false,
-    selectedItem: this.props.items && this.props.items[0]
-  };
-
   dropDown = () => {
-    this.setState(prevState => ({ showItems: !prevState.showItems }));
+    this.props.onDropdownChange();
   };
 
   selectItem = item => {
-    this.setState({ selectedItem: item, showItems: false });
-
-    this.props.onAccountChange(item.value);
+    this.props.onAccountChange(item);
   };
 
   keypress = e => {
@@ -30,7 +22,7 @@ class Dropdown extends Component {
       <div className="select-box">
         <div className="select-box-container">
           <div className="select-box-selected-item">
-            {this.state.selectedItem.value}
+            {this.props.selectedAccount.value}
           </div>
           <button
             className="select-box-arrow-container"
@@ -39,17 +31,17 @@ class Dropdown extends Component {
           >
             <span
               className={
-                this.state.showItems
+                this.props.showItems
                   ? "select-box-arrow-up"
                   : "select-box-arrow-down"
               }
             />
           </button>
           <div
-            style={{ display: this.state.showItems ? "block" : "none" }}
+            style={{ display: this.props.showItems ? "block" : "none" }}
             className="select-box-items"
           >
-            {this.state.items.map(item => (
+            {this.props.items.map(item => (
               <div
                 key={item.id}
                 onClick={() => this.selectItem(item)}
@@ -65,8 +57,8 @@ class Dropdown extends Component {
         </div>
         <input
           type="hidden"
-          value={this.state.selectedItem.id}
-          name={this.state.selectedItem.value}
+          value={this.props.selectedAccount.id}
+          name={this.props.selectedAccount.value}
         />
       </div>
     );

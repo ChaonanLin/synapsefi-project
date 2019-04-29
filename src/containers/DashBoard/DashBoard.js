@@ -4,89 +4,24 @@ import DebitCard from "../../components/DebitCard/DebitCard";
 import Dialog from "@material-ui/core/Dialog";
 import Transaction from "../../components/Transaction/Transaction";
 import PaymentModal from ".././PaymentModal/PaymentModal";
-import axios from "axios";
 import "./DashBoard.css";
+import {
+  onModalChange,
+  getCurrentAccount,
+  getAllOtherAccount,
+  getAllTransactions
+} from "../.././store/actions/actions";
 
 class DashBoard extends Component {
-  state = {
-    currentAccount: {},
-    nodes: [],
-    transactions: []
-  };
-
-  headers = {
-    "X-SP-GATEWAY":
-      "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
-    "X-SP-USER-IP": "73.241.31.11",
-    "X-SP-USER": "oauth_A9u0w8NIkC7sB2v3WFRnpjJcSL0tPEh1mUDQrfgG|",
-    "Content-Type": "application/json",
-    "Access-Control-Allow-Origin": "*"
-  };
-
-  //get current account info
-  getCurrentAccount = () => {
-    axios
-      .get(
-        `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26`,
-        {
-          headers: this.headers
-        }
-      )
-      .then(res => {
-        this.setState({ currentAccount: res.data });
-      })
-      .catch(res => {
-        console.log("failed", res);
-      });
-  };
-
-  //get all other accounts exept for currentAccount
-  getAllOtherAccount = () => {
-    axios
-      .get(
-        `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes`,
-        {
-          headers: this.headers
-        }
-      )
-      .then(res => {
-        //filter out the current account
-        let otherAccount = res.data.nodes.filter(
-          node => node._id !== "5cc661ea21730420ee50ee26"
-        );
-        this.setState({ nodes: otherAccount });
-      })
-      .catch(res => {
-        console.log("failed", res);
-      });
-  };
-
-  //get all transactions data of current Account
-  getAllTransactions = () => {
-    axios
-      .get(
-        `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26/trans`,
-        {
-          headers: this.headers
-        }
-      )
-      .then(res => {
-        this.setState({ transactions: res.data.trans });
-      })
-      .catch(res => {
-        console.log("failed", res);
-      });
-  };
-
   componentDidMount() {
-    this.getCurrentAccount();
-    this.getAllOtherAccount();
-    this.getAllTransactions();
+    this.props.getCurrentAccount();
+    this.props.getAllOtherAccount();
+    this.props.getAllTransactions();
   }
 
   render() {
-    let amount = this.state.currentAccount.info
-      ? this.state.currentAccount.info.balance.amount
+    let amount = this.props.currentAccount.info
+      ? this.props.currentAccount.info.balance.amount
       : "loading";
 
     return (
@@ -141,8 +76,6 @@ class DashBoard extends Component {
           <Dialog open={this.props.modalStatus}>
             <PaymentModal
               onCloseModal={this.props.onModalChange}
-              type={this.props.modalType}
-              accounts={this.state.nodes}
               balance={amount}
             />
           </Dialog>
@@ -153,7 +86,7 @@ class DashBoard extends Component {
           <div style={{ marginTop: 40 }}>
             <div className="transactions-subtitle">PAST TRANSACTIONS</div>
             <div>
-              {this.state.transactions.map(transaction => {
+              {this.props.transactions.map(transaction => {
                 return (
                   <Transaction
                     key={transaction._id}
@@ -185,14 +118,18 @@ class DashBoard extends Component {
 const mapStateToProps = state => {
   return {
     modalStatus: state.modalOpen,
-    modalType: state.modalType
+    currentAccount: state.currentAccount,
+    transactions: state.transactions,
+    otherAccounts: state.otherAccounts
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onModalChange: modalType =>
-      dispatch({ type: "ON_MODALCHANGE", modalType: modalType })
+    onModalChange: modalType => dispatch(onModalChange(modalType)),
+    getCurrentAccount: () => dispatch(getCurrentAccount()),
+    getAllOtherAccount: () => dispatch(getAllOtherAccount()),
+    getAllTransactions: () => dispatch(getAllTransactions())
   };
 };
 

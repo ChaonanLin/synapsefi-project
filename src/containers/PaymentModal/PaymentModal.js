@@ -4,32 +4,28 @@ import Dropdown from "../../components/Dropdown/Dropdown.js";
 import CurrencyInput from "react-currency-input";
 import "./PaymentModal.css";
 import axios from "axios";
+import {
+  onModalChange,
+  changeDropdown,
+  changeTransAmount,
+  changeAccount
+} from "../.././store/actions/actions";
 
 class PaymentModal extends Component {
-  state = {
-    bankAcounts: this.props.accounts,
-    selectedAccount: this.props.accounts[0]
-  };
-
-  changeAccount = item => {
-    this.setState({ selectedAccount: item });
-    this.props.changeDropdown();
-  };
-
   CashOut = () => {
     let headers = {
       "X-SP-GATEWAY":
         "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
       "X-SP-USER-IP": "73.241.31.11",
-      "X-SP-USER": "oauth_A9u0w8NIkC7sB2v3WFRnpjJcSL0tPEh1mUDQrfgG|",
+      "X-SP-USER": "oauth_GbwYxPstFqUQM95EmJo0DpThLl0izVk6g8RI42n7|",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
     };
 
     let data = {
       to: {
-        type: this.state.selectedAccount.type,
-        id: this.state.selectedAccount._id
+        type: this.props.selectedAccount.type,
+        id: this.props.selectedAccount._id
       },
       amount: {
         amount: parseFloat(this.props.amount.slice(1)),
@@ -66,7 +62,7 @@ class PaymentModal extends Component {
       "X-SP-GATEWAY":
         "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
       "X-SP-USER-IP": "73.241.31.11",
-      "X-SP-USER": "oauth_XweunAT2HLKhxdkstyvlPRYq64FZ3SBoGrmOVb0U|",
+      "X-SP-USER": "oauth_GbwYxPstFqUQM95EmJo0DpThLl0izVk6g8RI42n7|",
       "Content-Type": "application/json",
       "Access-Control-Allow-Origin": "*"
     };
@@ -87,7 +83,7 @@ class PaymentModal extends Component {
 
     let url =
       "https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/" +
-      this.state.selectedAccount._id +
+      this.props.selectedAccount._id +
       "/trans";
 
     axios
@@ -110,10 +106,10 @@ class PaymentModal extends Component {
   handleSubmit = e => {
     e.preventDefault();
 
-    if (this.props.type === "add cash") {
+    if (this.props.modalType === "add cash") {
       this.AddCash();
     }
-    if (this.props.type === "cash out") {
+    if (this.props.modalType === "cash out") {
       this.CashOut();
     }
   };
@@ -126,7 +122,7 @@ class PaymentModal extends Component {
             <i className="fas fa-times" />
           </div>
           <div className="payment-title">
-            {this.props.type === "add cash" ? "ADD CASH" : "CASH OUT"}
+            {this.props.modalType === "add cash" ? "ADD CASH" : "CASH OUT"}
           </div>
           <div className="payment-divider" />
           <div className="payment-description">
@@ -144,20 +140,20 @@ class PaymentModal extends Component {
           </div>
           <div className="payment-account-dropdown">
             <Dropdown
-              items={this.state.bankAcounts}
-              selectedAccount={this.state.selectedAccount}
+              items={this.props.otherAccounts}
+              selectedAccount={this.props.selectedAccount}
               showItems={this.props.showDropdownItems}
-              onAccountChange={this.changeAccount}
+              onAccountChange={item => this.props.changeAccount(item)}
               onDropdownChange={this.props.changeDropdown}
             />
           </div>
           <div style={{ textAlign: "center", marginBottom: 30 }}>
             <input
               type="submit"
-              value={this.props.type === "add cash" ? "Add Cash" : "Cash Out"}
+              value={this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"}
               className="payment-button"
-              name={this.props.type === "add cash" ? "Add Cash" : "Cash Out"}
-              id={this.props.type === "add cash" ? "Add Cash" : "Cash Out"}
+              name={this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"}
+              id={this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"}
             />
           </div>
         </div>
@@ -168,21 +164,23 @@ class PaymentModal extends Component {
 
 const mapStateToProps = state => {
   return {
+    modalType:state.modalType,
     amount: state.transactionAmount,
-    showDropdownItems: state.showDropdownItems
+    showDropdownItems: state.showDropdownItems,
+    otherAccounts: state.otherAccounts,
+    selectedAccount: state.selectedAccount._id
+      ? state.selectedAccount
+      : state.otherAccounts[0]
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
-    onModalChange: modalType =>
-      dispatch({ type: "ON_MODALCHANGE", modalType: modalType }),
+    onModalChange: modalType => dispatch(onModalChange(modalType)),
     changeAmount: (event, maskedvalue, floatvalue) =>
-      dispatch({
-        type: "CHANGE_TRANSAMOUNT",
-        playload: { event, maskedvalue, floatvalue }
-      }),
-    changeDropdown: () => dispatch({ type: "CHANGE_DROPDOWN" })
+      dispatch(changeTransAmount(event, maskedvalue, floatvalue)),
+    changeDropdown: () => dispatch(changeDropdown()),
+    changeAccount: item => dispatch(changeAccount(item))
   };
 };
 

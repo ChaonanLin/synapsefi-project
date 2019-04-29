@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import DebitCard from "../../components/DebitCard/DebitCard";
 import Dialog from "@material-ui/core/Dialog";
 import Transaction from "../../components/Transaction/Transaction";
@@ -8,36 +9,27 @@ import "./DashBoard.css";
 
 class DashBoard extends Component {
   state = {
-    modalOpen: false,
-    modalType: "",
     currentAccount: {},
     nodes: [],
     transactions: []
   };
 
-  onModalChange = value => {
-    this.setState(prevState => ({
-      modalOpen: !prevState.modalOpen,
-      modalType: value
-    }));
+  headers = {
+    "X-SP-GATEWAY":
+      "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
+    "X-SP-USER-IP": "73.241.31.11",
+    "X-SP-USER": "oauth_A9u0w8NIkC7sB2v3WFRnpjJcSL0tPEh1mUDQrfgG|",
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*"
   };
 
-  componentDidMount() {
-    let headers = {
-      "X-SP-GATEWAY":
-        "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
-      "X-SP-USER-IP": "73.241.31.11",
-      "X-SP-USER": "oauth_IiOtyoju0mn59JCH2QELd4BWfKPSGhV8YzDbZM0U|",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    };
-
-    //get current account info
+  //get current account info
+  getCurrentAccount = () => {
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26`,
         {
-          headers: headers
+          headers: this.headers
         }
       )
       .then(res => {
@@ -46,47 +38,56 @@ class DashBoard extends Component {
       .catch(res => {
         console.log("failed", res);
       });
+  };
 
-    //get all other accounts
+  //get all other accounts exept for currentAccount
+  getAllOtherAccount = () => {
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes`,
         {
-          headers: headers
+          headers: this.headers
         }
       )
       .then(res => {
-        console.log(res.data.nodes);
         //filter out the current account
-        let otherAccount = res.data.nodes.filter(node => node._id !== "5cc661ea21730420ee50ee26")
+        let otherAccount = res.data.nodes.filter(
+          node => node._id !== "5cc661ea21730420ee50ee26"
+        );
         this.setState({ nodes: otherAccount });
       })
       .catch(res => {
         console.log("failed", res);
       });
+  };
 
-    //get all transactions data of test saving account
+  //get all transactions data of current Account
+  getAllTransactions = () => {
     axios
       .get(
         `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26/trans`,
         {
-          headers: headers
+          headers: this.headers
         }
       )
       .then(res => {
-        console.log(res.data.trans);
         this.setState({ transactions: res.data.trans });
       })
       .catch(res => {
         console.log("failed", res);
       });
+  };
+
+  componentDidMount() {
+    this.getCurrentAccount();
+    this.getAllOtherAccount();
+    this.getAllTransactions();
   }
 
   render() {
-    let amount =
-      this.state.currentAccount.info
-        ? this.state.currentAccount.info.balance.amount
-        : "loading";
+    let amount = this.state.currentAccount.info
+      ? this.state.currentAccount.info.balance.amount
+      : "loading";
 
     return (
       <div className="dashboard-container">
@@ -121,7 +122,7 @@ class DashBoard extends Component {
             <div className="dashboard-half-container">
               <button
                 className="button__blue"
-                onClick={() => this.onModalChange("add cash")}
+                onClick={() => this.props.onModalChange("add cash")}
               >
                 Add Cash
               </button>
@@ -129,7 +130,7 @@ class DashBoard extends Component {
             <div className="dashboard-half-container">
               <button
                 className="button__blue"
-                onClick={() => this.onModalChange("cash out")}
+                onClick={() => this.props.onModalChange("cash out")}
               >
                 Cash Out
               </button>
@@ -137,10 +138,10 @@ class DashBoard extends Component {
           </div>
         </div>
         <div>
-          <Dialog open={this.state.modalOpen}>
+          <Dialog open={this.props.modalStatus}>
             <PaymentModal
-              onCloseModal={this.onModalChange}
-              type={this.state.modalType}
+              onCloseModal={this.props.onModalChange}
+              type={this.props.modalType}
               accounts={this.state.nodes}
               balance={amount}
             />
@@ -156,12 +157,20 @@ class DashBoard extends Component {
                 return (
                   <Transaction
                     key={transaction._id}
-                    type={transaction.from.id === "5cc661ea21730420ee50ee26" ? "Card Withdrawal" : "Cash Deposit"}
+                    type={
+                      transaction.from.id === "5cc661ea21730420ee50ee26"
+                        ? "Card Withdrawal"
+                        : "Cash Deposit"
+                    }
                     date="29 April 2019"
                     amount={"$" + transaction.amount.amount}
                     status={transaction.recent_status.status}
                     id={transaction._id}
-                    direction={transaction.from.id === "5cc661ea21730420ee50ee26" ? transaction.to.nickname : transaction.from.nickname }
+                    direction={
+                      transaction.from.id === "5cc661ea21730420ee50ee26"
+                        ? transaction.to.nickname
+                        : transaction.from.nickname
+                    }
                   />
                 );
               })}
@@ -173,4 +182,21 @@ class DashBoard extends Component {
   }
 }
 
-export default DashBoard;
+const mapStateToProps = state => {
+  return {
+    modalStatus: state.modalOpen,
+    modalType: state.modalType
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onModalChange: modalType =>
+      dispatch({ type: "ON_MODALCHANGE", modalType: modalType })
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DashBoard);

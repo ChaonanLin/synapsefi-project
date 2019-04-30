@@ -1,6 +1,7 @@
 This Project is a simple bank account user interface built on top of [Synapsefi API](https://docs.synapsefi.com/) in its Sandbox environment. Synapse APIs help companies build and launch best-in-class financial products on top of our banking infrastructure.
 
-This demo project has the basic functions of <br> 1. rendering transaction history <br> 2.transfer money between bank accounts/cards of the same user. <br>And the rest part of the UI are static UI.
+This demo project has the basic functions of <br> 1. rendering transaction history <br> 2.transfer money between bank accounts/cards of the same user <br>
+And the rest part of the UI are static UI.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -8,13 +8,13 @@ import "./DashBoard.css";
 import { onModalChange, getAuthanticated } from "../.././store/actions/actions";
 
 class DashBoard extends Component {
-
-// get oauth_key and fetch user accounts/transactions data
+  // get oauth_key and fetch user accounts/transactions data in its callbacks
   componentDidMount() {
     this.props.getAuthanticated();
   }
 
   render() {
+    //if state in store is undefine, show loading on balance
     let balance = this.props.currentAccount.info
       ? this.props.currentAccount.info.balance.amount
       : "loading";
@@ -52,6 +52,7 @@ class DashBoard extends Component {
             <div className="dashboard-half-container">
               <button
                 className="button__blue"
+                //pass a modalType value to paymentModal components so it renders two types of modal accordingly (either add cash or cash out)
                 onClick={() => this.props.onModalChange("add cash")}
               >
                 Add Cash
@@ -82,15 +83,18 @@ class DashBoard extends Component {
             <div className="transactions-subtitle">PAST TRANSACTIONS</div>
             <div>
               {this.props.transactions.map(transaction => {
+                let date = new Date(transaction.recent_status.date);
+                let stringDate = date.toDateString();
                 return (
                   <Transaction
                     key={transaction._id}
                     type={
+                      // if the from.id is currentAccount id, then it's a Withdrawal, vice verse
                       transaction.from.id === "5cc661ea21730420ee50ee26"
                         ? "Card Withdrawal"
                         : "Cash Deposit"
                     }
-                    date="29 April 2019"
+                    date={stringDate}
                     amount={"$" + transaction.amount.amount}
                     status={transaction.recent_status.status}
                     id={transaction._id}
@@ -115,7 +119,7 @@ const mapStateToProps = state => {
     modalStatus: state.modalOpen,
     currentAccount: state.currentAccount,
     transactions: state.transactions,
-    otherAccounts: state.otherAccounts,
+    otherAccounts: state.otherAccounts, //user's other accounts which will show on payment modal dropdown
     authKey: state.authKey
   };
 };

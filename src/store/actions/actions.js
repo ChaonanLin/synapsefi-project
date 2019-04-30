@@ -52,6 +52,7 @@ export const getAuthanticated = () => {
         }
       )
       .then(res => {
+          //pass refresh_token to useRefreshKey then get auth_key
         dispatch(useRefreshKey(res.data.refresh_token));
       })
       .catch(res => {
@@ -79,6 +80,7 @@ export const useRefreshKey = refresh_token => {
         }
       )
       .then(res => {
+          //when get auth_key, set the store state, and starting fetch protected data with the auth_key
         dispatch(setAuthKey(res.data.oauth_key));
         dispatch(getCurrentAccount(res.data.oauth_key));
         dispatch(getAllOtherAccount(res.data.oauth_key));
@@ -90,6 +92,8 @@ export const useRefreshKey = refresh_token => {
   };
 };
 
+
+// a common headers for getCurrentAccount; getAllOtherAccount; getAllTransactions below
 const headers = {
   "X-SP-GATEWAY":
     "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
@@ -99,6 +103,7 @@ const headers = {
   "Access-Control-Allow-Origin": "*"
 };
 
+// get Current Account data and set it to state
 export const setCurrentAccount = accountdata => {
   return {
     type: actionTypes.SET_CURRENTACCOUNT,
@@ -124,6 +129,7 @@ export const getCurrentAccount = authKey => {
   };
 };
 
+// get all other accounts data and set it to state
 export const setAllOtherAccount = accountdata => {
   return {
     type: actionTypes.SET_ALLOTHERACCOUNT,
@@ -141,7 +147,7 @@ export const getAllOtherAccount = authKey => {
         }
       )
       .then(res => {
-        //filter out the current account
+        //filter out the current account so only other accouns will be shown in the dropdown
         let otherAccount = res.data.nodes.filter(
           node => node._id !== "5cc661ea21730420ee50ee26"
         );
@@ -153,6 +159,7 @@ export const getAllOtherAccount = authKey => {
   };
 };
 
+// get all transactions data and set it to state
 export const setAllTransactions = transactions => {
   return {
     type: actionTypes.SET_ALLTRANSACTIONS,

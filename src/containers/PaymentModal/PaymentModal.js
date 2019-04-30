@@ -12,7 +12,9 @@ import {
 } from "../.././store/actions/actions";
 
 class PaymentModal extends Component {
-  auth_key = this.props.authKey.concat("","|");
+  //get auth_key from state store and get it ready to be passed to request headers
+  auth_key = this.props.authKey.concat("", "|");
+  //headers that can be use for both CashOut and AddCash requests
   headers = {
     "X-SP-GATEWAY":
       "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
@@ -23,14 +25,14 @@ class PaymentModal extends Component {
   };
 
   CashOut = () => {
-    console.log(this.props.authKey)
-
+      //when cashout, set the data.to object the selected account
     let data = {
       to: {
         type: this.props.selectedAccount.type,
         id: this.props.selectedAccount._id
       },
       amount: {
+        // remove the $
         amount: parseFloat(this.props.amount.slice(1)),
         currency: "USD"
       },

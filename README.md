@@ -1,4 +1,4 @@
-This Project is a simple bank account user interface built on top of [Synapsefi API](https://docs.synapsefi.com/) in its Sandbox environment. Synapse APIs help companies build and launch best-in-class financial products on top of our banking infrastructure.
+This Project is a simple bank account user interface built on top of [SynapseFI API](https://docs.synapsefi.com/) in its Sandbox environment. SynapseFI APIs help companies build and launch best-in-class financial products on top of our banking infrastructure.
 
 This demo project has the basic functions of <br> 1. rendering transaction history <br> 2.transfer money between bank accounts/cards of the same user <br>
 And the rest part of the UI are static UI.
@@ -10,7 +10,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 In the project directory, you can run: `npm start` to run the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-## Snapsefi API Used
+## SynapseFI API Used
 
 Create User, OAuth User, View User, Open Deposit Account, Issue a Card Number, Activate Card, ACH Transactions, Link with Bank Logins, View All User Nodes, View Node Transactions, View Account
 

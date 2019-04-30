@@ -52,7 +52,7 @@ export const getAuthanticated = () => {
         }
       )
       .then(res => {
-          //pass refresh_token to useRefreshKey then get auth_key
+        //pass refresh_token to useRefreshKey then get auth_key
         dispatch(useRefreshKey(res.data.refresh_token));
       })
       .catch(res => {
@@ -80,7 +80,7 @@ export const useRefreshKey = refresh_token => {
         }
       )
       .then(res => {
-          //when get auth_key, set the store state, and starting fetch protected data with the auth_key
+        //when get auth_key, set the store state, and starting fetch protected data with the auth_key
         dispatch(setAuthKey(res.data.oauth_key));
         dispatch(getCurrentAccount(res.data.oauth_key));
         dispatch(getAllOtherAccount(res.data.oauth_key));
@@ -91,7 +91,6 @@ export const useRefreshKey = refresh_token => {
       });
   };
 };
-
 
 // a common headers for getCurrentAccount; getAllOtherAccount; getAllTransactions below
 const headers = {

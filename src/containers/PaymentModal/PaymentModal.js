@@ -25,7 +25,7 @@ class PaymentModal extends Component {
   };
 
   CashOut = () => {
-      //when cashout, set the data.to object the selected account
+    //when cashout, set the data.to object the selected account
     let data = {
       to: {
         type: this.props.selectedAccount.type,
@@ -52,17 +52,19 @@ class PaymentModal extends Component {
       .then(res => {
         console.log("transaction made");
         this.props.onModalChange();
+        //reload the page to get new transaction shows
         window.location.reload();
       })
       .catch(res => {
         alert(
-          "Oh no,something happened and the transaction has not been made. Please try later."
+          "Oh no,something happened and the transaction has not been made. Please refresh the page and try later."
         );
         console.log("failed", res);
       });
   };
 
   AddCash = () => {
+    //when add cash to current account, set the data.to object the current account info
     let data = {
       to: {
         type: "ACH-US",
@@ -77,6 +79,7 @@ class PaymentModal extends Component {
       }
     };
 
+    //when add cash to current account, set the selected account id as the transfer from account by adding its id to request url
     let url =
       "https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/" +
       this.props.selectedAccount._id +
@@ -93,13 +96,14 @@ class PaymentModal extends Component {
       })
       .catch(res => {
         alert(
-          "Oh no,something happened and the transaction has not been made. Please try later."
+          "Oh no,something happened and the transaction has not been made. Please refresh the page and try later."
         );
         console.log("failed", res);
       });
   };
 
   handleSubmit = e => {
+    //prevent auto reload before the API called
     e.preventDefault();
 
     if (this.props.modalType === "add cash") {

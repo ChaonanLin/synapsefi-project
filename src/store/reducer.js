@@ -39,6 +39,7 @@ const reducer = (state = initialState, action) => {
         selectedAccount: action.selected,
         showDropdownItems: false
       };
+
     case actionTypes.SET_AUTHKEY:
       return {
         ...state,
@@ -50,16 +51,19 @@ const reducer = (state = initialState, action) => {
         ...state,
         currentAccount: action.account
       };
+
     case actionTypes.SET_ALLOTHERACCOUNT:
       return {
         ...state,
         otherAccounts: action.account
       };
+
     case actionTypes.SET_ALLTRANSACTIONS:
       return {
         ...state,
         transactions: action.transactions
       };
+
     default:
       return state;
   }

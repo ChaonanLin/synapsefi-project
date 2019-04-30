@@ -28,6 +28,7 @@ Create User, OAuth User, View User, Open Deposit Account, Issue a Card Number, A
 - Would be nice to add:
     - Responsiveness
     - Form validation
+    - Test unit
     - Better error handling feedbacks
     - More complete functionalities
     - ...

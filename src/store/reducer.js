@@ -1,6 +1,7 @@
 import * as actionTypes from "./actions/actionTypes";
 
 const initialState = {
+  ahthKey: "",
   currentAccount: {},
   otherAccounts: [],
   transactions: [],
@@ -37,6 +38,11 @@ const reducer = (state = initialState, action) => {
         ...state,
         selectedAccount: action.selected,
         showDropdownItems: false
+      };
+    case actionTypes.SET_AUTHKEY:
+      return {
+        ...state,
+        authKey: action.key
       };
 
     case actionTypes.SET_CURRENTACCOUNT:

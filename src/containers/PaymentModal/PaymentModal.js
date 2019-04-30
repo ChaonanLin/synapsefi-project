@@ -12,15 +12,18 @@ import {
 } from "../.././store/actions/actions";
 
 class PaymentModal extends Component {
+  auth_key = this.props.authKey.concat("","|");
+  headers = {
+    "X-SP-GATEWAY":
+      "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
+    "X-SP-USER-IP": "73.241.31.11",
+    "X-SP-USER": this.auth_key,
+    "Content-Type": "application/json",
+    "Access-Control-Allow-Origin": "*"
+  };
+
   CashOut = () => {
-    let headers = {
-      "X-SP-GATEWAY":
-        "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
-      "X-SP-USER-IP": "73.241.31.11",
-      "X-SP-USER": "oauth_GbwYxPstFqUQM95EmJo0DpThLl0izVk6g8RI42n7|",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    };
+    console.log(this.props.authKey)
 
     let data = {
       to: {
@@ -41,7 +44,7 @@ class PaymentModal extends Component {
         `https://cors-anywhere.herokuapp.com/https://uat-api.synapsefi.com/v3.1/users/5cc13e09ad388f6fabe64d76/nodes/5cc661ea21730420ee50ee26/trans`,
         data,
         {
-          headers: headers
+          headers: this.headers
         }
       )
       .then(res => {
@@ -58,15 +61,6 @@ class PaymentModal extends Component {
   };
 
   AddCash = () => {
-    let headers = {
-      "X-SP-GATEWAY":
-        "client_id_gcvWhR0VjZiawAr8JU6LpkN2bKtx5OmzulyFBM70|client_secret_3xDY0cMElJmeq7r6ZfIsPj2gBLTUOSyG1dnpt8VA",
-      "X-SP-USER-IP": "73.241.31.11",
-      "X-SP-USER": "oauth_GbwYxPstFqUQM95EmJo0DpThLl0izVk6g8RI42n7|",
-      "Content-Type": "application/json",
-      "Access-Control-Allow-Origin": "*"
-    };
-
     let data = {
       to: {
         type: "ACH-US",
@@ -88,7 +82,7 @@ class PaymentModal extends Component {
 
     axios
       .post(url, data, {
-        headers: headers
+        headers: this.headers
       })
       .then(res => {
         console.log("transaction made");
@@ -150,9 +144,13 @@ class PaymentModal extends Component {
           <div style={{ textAlign: "center", marginBottom: 30 }}>
             <input
               type="submit"
-              value={this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"}
+              value={
+                this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"
+              }
               className="payment-button"
-              name={this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"}
+              name={
+                this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"
+              }
               id={this.props.modalType === "add cash" ? "Add Cash" : "Cash Out"}
             />
           </div>
@@ -164,7 +162,8 @@ class PaymentModal extends Component {
 
 const mapStateToProps = state => {
   return {
-    modalType:state.modalType,
+    authKey: state.authKey,
+    modalType: state.modalType,
     amount: state.transactionAmount,
     showDropdownItems: state.showDropdownItems,
     otherAccounts: state.otherAccounts,

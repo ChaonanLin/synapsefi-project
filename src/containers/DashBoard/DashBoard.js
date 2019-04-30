@@ -5,22 +5,17 @@ import Dialog from "@material-ui/core/Dialog";
 import Transaction from "../../components/Transaction/Transaction";
 import PaymentModal from ".././PaymentModal/PaymentModal";
 import "./DashBoard.css";
-import {
-  onModalChange,
-  getCurrentAccount,
-  getAllOtherAccount,
-  getAllTransactions
-} from "../.././store/actions/actions";
+import { onModalChange, getAuthanticated } from "../.././store/actions/actions";
 
 class DashBoard extends Component {
+
+// get oauth_key and fetch user accounts/transactions data
   componentDidMount() {
-    this.props.getCurrentAccount();
-    this.props.getAllOtherAccount();
-    this.props.getAllTransactions();
+    this.props.getAuthanticated();
   }
 
   render() {
-    let amount = this.props.currentAccount.info
+    let balance = this.props.currentAccount.info
       ? this.props.currentAccount.info.balance.amount
       : "loading";
 
@@ -35,7 +30,7 @@ class DashBoard extends Component {
             style={{ fontSize: 55, fontWeight: 400, letterSpacing: 3 }}
             className="scdryfont"
           >
-            ${amount}
+            ${balance}
           </h1>
           <div className="dashboard-card-tools">
             <div className="dashboard-half-container">
@@ -76,7 +71,7 @@ class DashBoard extends Component {
           <Dialog open={this.props.modalStatus}>
             <PaymentModal
               onCloseModal={this.props.onModalChange}
-              balance={amount}
+              balance={balance}
             />
           </Dialog>
         </div>
@@ -120,16 +115,15 @@ const mapStateToProps = state => {
     modalStatus: state.modalOpen,
     currentAccount: state.currentAccount,
     transactions: state.transactions,
-    otherAccounts: state.otherAccounts
+    otherAccounts: state.otherAccounts,
+    authKey: state.authKey
   };
 };
 
 const mapDispatchToProps = dispatch => {
   return {
     onModalChange: modalType => dispatch(onModalChange(modalType)),
-    getCurrentAccount: () => dispatch(getCurrentAccount()),
-    getAllOtherAccount: () => dispatch(getAllOtherAccount()),
-    getAllTransactions: () => dispatch(getAllTransactions())
+    getAuthanticated: () => dispatch(getAuthanticated())
   };
 };
 
